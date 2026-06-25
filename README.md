@@ -71,11 +71,9 @@ These techniques ensure that all critical sensing tasks continue meeting their t
 
 | Task                    | Function                       | Period    | Priority    |
 | ----------------------- | ------------------------------ | --------- | ----------- |
-| Temperature Task        | Read temperature sensor        | 200 ms    | 5 (Highest) |
-| Vibration Task          | Read vibration sensor          | 500 ms    | 4           |
-| Log Trigger Task        | Trigger logger using semaphore | 1000 ms   | 3           |
-| Logger Task             | Simulate SD/UART logging       | Triggered | 2           |
-| Runtime Statistics Task | Display runtime statistics     | 2000 ms   | 1           |
+| Temperature Task        | Read temperature sensor        | 200 ms    | 4 (Highest) |
+| Vibration Task          | Read vibration sensor          | 500 ms    | 3           |
+| SD Logging              | Trigger logger using semaphore | 1000 ms   | 2           |
 | LED Alive Task          | Blink heartbeat LED            | 500 ms    | 1           |
 
 ---
