@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "author": "Grey",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "board-esp32-devkit-c-v4", "id": "esp", "top": 0, "left": -4.76, "attrs": {} },
+    { "type": "wokwi-led", "id": "led1", "top": 34.8, "left": -63.4, "attrs": { "color": "red" } },
+    { "type": "wokwi-ntc-temperature-sensor", "id": "ntc1", "top": -80, "left": -180, "attrs": {} },
+    { "type": "wokwi-potentiometer", "id": "pot1", "top": -118.1, "left": 126.2, "attrs": {} },
+    {
+      "type": "wokwi-resistor",
+      "id": "r1",
+      "top": 120,
+      "left": -106.15,
+      "rotate": 90,
+      "attrs": { "value": "330" }
+    },
+    { "type": "wokwi-logic-analyzer", "id": "logic1", "top": 38.75, "left": 163.2, "attrs": {} }
+  ],
+  "connections": [
+    [ "esp:TX", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX", "$serialMonitor:TX", "", [] ],
+
+    [ "r1:1", "led1:C", "green", [ "v0" ] ],
+    [ "led1:A", "esp:2", "green", [ "v0" ] ],
+    [ "r1:2", "esp:GND.1", "green", [ "h57.6", "v-20.4" ] ],
+
+    [ "ntc1:VCC", "esp:3V3", "red", [] ],
+    [ "ntc1:GND", "esp:GND.2", "black", [] ],
+    [ "ntc1:A0", "esp:34", "blue", [] ],
+
+    [ "pot1:VCC", "esp:3V3", "red", [] ],
+    [ "pot1:GND", "esp:GND.2", "black", [] ],
+    [ "pot1:SIG", "esp:35", "blue", [] ],
+
+    [ "esp:13", "logic1:D0", "green", [ "h-38.25", "v76.8", "h153.6", "v-192" ] ],
+    [ "esp:12", "logic1:D1", "green", [ "h-28.65", "v-153.6", "h153.6", "v67.2" ] ],
+    [ "esp:14", "logic1:D2", "green", [ "h-18.25", "v90", "h160", "v-130" ] ],
+    [ "esp:27", "logic1:D3", "green", [ "h-10", "v100", "h175", "v-100" ] ]
+  ],
+  "dependencies": {}
+}
