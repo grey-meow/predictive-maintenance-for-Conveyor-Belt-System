@@ -261,7 +261,22 @@ void ledTask(void *pvParameters) {
   while (1) {
     digitalWrite(LED_TRACE_PIN, HIGH);
 
-    digitalWrite(LED_PIN, !digitalRead(LED_PIN));
+    // Toggle LED
+    bool ledState = !digitalRead(LED_PIN);
+    digitalWrite(LED_PIN, ledState);
+
+    // Print LED status and blink frequency
+    if (xSemaphoreTake(serialMutex, pdMS_TO_TICKS(20)) == pdTRUE) {
+      float blinkHz = 1000.0 / (2.0 * LED_TOGGLE_MS);
+
+      Serial.print("[LED Task] LED ");
+      Serial.print(ledState ? "ON" : "OFF");
+      Serial.print(" | Blink Frequency = ");
+      Serial.print(blinkHz, 1);
+      Serial.println(" Hz");
+
+      xSemaphoreGive(serialMutex);
+    }
 
     vTaskDelay(pdMS_TO_TICKS(20));
 
