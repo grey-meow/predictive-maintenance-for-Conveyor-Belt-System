@@ -11,12 +11,13 @@ An ESP32-based predictive maintenance system developed using **FreeRTOS**, **Pla
 
 # Course Information
 
-| Item           | Details                                                                     |
-| -------------- | --------------------------------------------------------------------------- |
-| **Course**     | BERC4833 & BERC4834 Real Time System                                        |
-| **Programme**  | Bachelor of Computer Engineering Technology (Computer Systems) with Honours |
-| **University** | Universiti Teknikal Malaysia Melaka (UTeM)                                  |
-| **Semester**   | Semester 2, Session 2025/2026                                               |
+| Item | Details |
+|------|---------|
+| **Course** | BERC4833 & BERC4834 Real Time System |
+| **Programme** | Bachelor of Computer Engineering Technology (Computer Systems) with Honours |
+| **Lecturer** | TS. DR. MOHD SAAD BIN HAMID |
+| **University** | Universiti Teknikal Malaysia Melaka (UTeM) |
+| **Semester** | Semester 2, Session 2025/2026 |
 
 ---
 
@@ -26,11 +27,11 @@ This project implements a predictive maintenance node for a conveyor belt system
 
 The system periodically performs:
 
-* Temperature monitoring every **200 ms**
-* Vibration monitoring every **500 ms**
-* SD/UART logging every **1000 ms**
-* Runtime statistics collection
-* LED heartbeat indication
+- Temperature monitoring every **200 ms**
+- Vibration monitoring every **500 ms**
+- Logger triggering every **1000 ms**
+- Runtime statistics collection every **2000 ms**
+- LED heartbeat indication at **2 Hz**
 
 The implementation demonstrates multitasking, priority scheduling, synchronization, and inter-task communication within a real-time embedded environment.
 
@@ -44,11 +45,11 @@ A simulated SD-card logging operation requires **300 ms**, potentially introduci
 
 To solve this issue, the project applies:
 
-* FreeRTOS Preemptive Scheduling
-* Rate Monotonic Scheduling (RMS)
-* Queue-based communication
-* Binary Semaphore synchronization
-* Mutex protection
+- FreeRTOS Preemptive Scheduling
+- Rate Monotonic Scheduling (RMS)
+- Queue-based communication
+- Binary Semaphore synchronization
+- Mutex protection
 
 These techniques ensure that all critical sensing tasks continue meeting their timing requirements while lower-priority logging operations execute in the background.
 
@@ -56,12 +57,12 @@ These techniques ensure that all critical sensing tasks continue meeting their t
 
 # Objectives
 
-* Develop a multitasking embedded system using ESP32 and FreeRTOS.
-* Implement periodic temperature and vibration monitoring.
-* Simulate slow SD-card logging.
-* Demonstrate Queue, Semaphore and Mutex synchronization.
-* Monitor runtime performance and deadline misses.
-* Validate scheduling behaviour using Wokwi simulation.
+- Develop a multitasking embedded system using ESP32 and FreeRTOS.
+- Implement periodic temperature and vibration monitoring.
+- Simulate slow SD-card logging.
+- Demonstrate Queue, Semaphore, and Mutex synchronization.
+- Monitor runtime performance and deadline misses.
+- Validate scheduling behaviour using Wokwi simulation.
 
 ---
 
@@ -69,47 +70,49 @@ These techniques ensure that all critical sensing tasks continue meeting their t
 
 ## Tasks Implemented
 
-| Task                    | Function                       | Period    | Priority    |
-| ----------------------- | ------------------------------ | --------- | ----------- |
-| Temperature Task        | Read temperature sensor        | 200 ms    | 4 (Highest) |
-| Vibration Task          | Read vibration sensor          | 500 ms    | 3           |
-| SD Logging              | Trigger logger using semaphore | 1000 ms   | 2           |
-| LED Alive Task          | Blink heartbeat LED            | 500 ms    | 1           |
+| Task | Function | Period | Priority |
+|------|----------|---------|----------|
+| Temperature Task | Read temperature sensor | 200 ms | 5 (Highest) |
+| Vibration Task | Read vibration sensor | 500 ms | 4 |
+| Log Trigger Task | Releases logger using Binary Semaphore | 1000 ms | 3 |
+| Logger Task | Simulated SD/UART logging | Event-driven | 2 |
+| Statistics Task | Runtime monitoring | 2000 ms | 1 |
+| LED Task | Heartbeat LED (2 Hz) | 500 ms | 1 |
 
 ---
 
 ## Scheduling Method
 
-* FreeRTOS Preemptive Scheduler
-* Rate Monotonic Scheduling (RMS)
-* Fixed-priority scheduling
-* Periodic execution using `vTaskDelayUntil()`
+- FreeRTOS Preemptive Scheduler
+- Rate Monotonic Scheduling (RMS)
+- Fixed-priority scheduling
+- Periodic execution using `vTaskDelayUntil()`
 
 ---
 
 # Hardware Components
 
-* ESP32 DevKit V4
-* NTC Temperature Sensor
-* Potentiometer (Vibration Sensor Simulation)
-* Red LED
-* 330 Ω Resistor
-* Logic Analyzer
-* Serial Monitor
+- ESP32 DevKit V4
+- NTC Temperature Sensor
+- Potentiometer (Vibration Sensor Simulation)
+- Red LED
+- 330 Ω Resistor
+- Logic Analyzer
+- Serial Monitor
 
 ---
 
 # Pin Assignment
 
-| Component          | GPIO   |
-| ------------------ | ------ |
+| Component | GPIO |
+|-----------|------|
 | Temperature Sensor | GPIO34 |
-| Vibration Sensor   | GPIO35 |
-| LED                | GPIO2  |
-| Logic Analyzer D0  | GPIO13 |
-| Logic Analyzer D1  | GPIO12 |
-| Logic Analyzer D2  | GPIO14 |
-| Logic Analyzer D3  | GPIO27 |
+| Vibration Sensor | GPIO35 |
+| LED | GPIO2 |
+| Logic Analyzer D0 | GPIO13 |
+| Logic Analyzer D1 | GPIO12 |
+| Logic Analyzer D2 | GPIO14 |
+| Logic Analyzer D3 | GPIO27 |
 
 ---
 
@@ -127,7 +130,6 @@ These techniques ensure that all critical sensing tasks continue meeting their t
 ├── diagram.json
 ├── platformio.ini
 ├── wokwi.toml
-├── .gitignore
 ├── README.md
 │
 └── screenshots
@@ -137,41 +139,49 @@ These techniques ensure that all critical sensing tasks continue meeting their t
 
 # FreeRTOS Features Demonstrated
 
-* Task Creation
-* Task Priorities
-* Rate Monotonic Scheduling (RMS)
-* Periodic Tasks
-* Queue Communication
-* Binary Semaphore
-* Mutex Protection
-* Runtime Statistics
-* Deadline Monitoring
-* Jitter Measurement
-* Queue Overflow Detection
-* Inter-task Communication
+- Task Creation
+- Task Priorities
+- Rate Monotonic Scheduling (RMS)
+- Periodic Tasks
+- Queue Communication
+- Binary Semaphore
+- Mutex Protection
+- Runtime Statistics
+- Deadline Monitoring
+- Jitter Measurement
+- Queue Overflow Detection
+- Logic Analyzer Task Tracing
+- Inter-task Communication
 
 ---
 
 # Expected Runtime Output
 
 ```text
-Predictive Maintenance FreeRTOS Demo Started
+FreeRTOS Predictive Maintenance System Started
 
-Temperature Task : 200 ms
-Vibration Task  : 500 ms
-Logger Task     : 1000 ms
-LED Task        : 2 Hz
+Temperature Task: 200 ms
+Vibration Task: 500 ms
+Logger Task: 1000 ms
+LED Task: 2 Hz alive indicator
+
+[LED Task] LED ON | Blink Frequency = 2.0 Hz
+[LED Task] LED OFF | Blink Frequency = 2.0 Hz
 
 ------ SD/UART LOGGING START ------
 Logger triggered at: 2510 ms
+Simulated SD write delay: 300 ms
 
-Time(ms)    Sensor  ADC   Interval  Jitter
-1709        TEMP    1370  200 ms    0 ms
-2010        VIB     4095  500 ms    0 ms
-2509        TEMP    1750  200 ms    0 ms
-2510        VIB     4095  500 ms    0 ms
+Time(ms)    Sensor  ADC   Interval    Jitter
+1710        TEMP    958   200 ms      0 ms
+2010        VIB     0     500 ms      0 ms
+2110        TEMP    934   200 ms      0 ms
+2310        TEMP    950   200 ms      0 ms
+2510        TEMP    1013  200 ms      0 ms
+2511        VIB     0     500 ms      0 ms
 
------- SD/UART LOGGING END --------
+Records logged: 8
+------ SD/UART LOGGING END ------
 
 [STATS] Runtime Statistics
 
@@ -190,9 +200,9 @@ Queue spaces available   : 26
 
 ## Requirements
 
-* Visual Studio Code
-* PlatformIO Extension
-* Wokwi Extension
+- Visual Studio Code
+- PlatformIO Extension
+- Wokwi Extension
 
 ---
 
@@ -200,6 +210,7 @@ Queue spaces available   : 26
 
 ```bash
 git clone https://github.com/grey-meow/predictive-maintenance-for-Conveyor-Belt-System.git
+cd predictive-maintenance-for-Conveyor-Belt-System
 ```
 
 ---
@@ -236,36 +247,40 @@ pio device monitor
 4. Open the Serial Monitor.
 5. Observe:
 
-   * Temperature readings every 200 ms.
-   * Vibration readings every 500 ms.
-   * Logger execution every 1000 ms.
-   * Runtime statistics every 2000 ms.
-   * LED heartbeat blinking at 2 Hz.
+- Temperature task executing every **200 ms**
+- Vibration task executing every **500 ms**
+- Logger triggered every **1000 ms**
+- Runtime statistics printed every **2000 ms**
+- LED heartbeat blinking at **2 Hz**
+- Logic Analyzer traces for each task
+- Queue, Semaphore, and Mutex operation
 
 ---
 
 # Team Members
 
-| Name                                | Student ID |
-| ----------------------------------- | ---------- |
-| NUR HUDA HIDAYAH BINTI IRMAN JOHAN  | B122310435 |
-| NURDINI IZZATI BINTI NORAZMI        | B122310053 |
-| NUR SARAH DHAMIRAH BINTI HAMDAN     | B122310361 |
+| Name | Student ID |
+|------|------------|
+| NUR HUDA HIDAYAH BINTI IRMAN JOHAN | B122310435 |
+| NURDINI IZZATI BINTI NORAZMI | B122310053 |
+| NUR SARAH DHAMIRAH BINTI HAMDAN | B122310361 |
 | SYAHIDATUL FARHANAH BINTI MAZHAIZAL | B122310450 |
-| NURUL FATIHA BINTI NOR AZMI         | B122310380 |
+| NURUL FATIHA BINTI NOR AZMI | B122310380 |
 
 ---
 
 # Repository Contents
 
-* ESP32 FreeRTOS source code
-* PlatformIO project configuration
-* Wokwi simulation files
-* Queue implementation
-* Semaphore synchronization
-* Mutex protection
-* Runtime statistics
-* Project documentation
+- ESP32 FreeRTOS source code
+- PlatformIO project configuration
+- Wokwi simulation files
+- Queue implementation
+- Binary Semaphore synchronization
+- Mutex protection
+- Runtime statistics
+- Rate Monotonic Scheduling (RMS)
+- Logic Analyzer task tracing
+- Project documentation
 
 ---
 
